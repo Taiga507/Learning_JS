@@ -1,3 +1,5 @@
+'use strict';
+
 function factorial(x) {
     if (typeof(x) !== 'number' || !Number.isInteger(x)) {
         return 'Ошибка';
