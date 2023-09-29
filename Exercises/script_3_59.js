@@ -1,15 +1,23 @@
 'use strict';
 
-// const user = {
-//     name: 'Alex',
-//     surname: 'Smith',
-//     birthday: '20/04/1997',
-//     showMyPublicDate: function() {
-//         console.log(`${this.name} ${this.surname}`);
-//     }
-// };
+const user = {
+    name: 'Alex',
+    surname: 'Smith',
+    birthday: '20/04/1997',
+    showMyPublicDate: function() {
+        console.log(`${this.name} ${this.surname}`);
+    }
+};
 
+// Доказательство, что ключ является строкой.
 // console.log(typeof(Object.keys(user)[0]));
+
+const userMap = new Map(Object.entries(user));
+console.log(userMap);
+
+const newUserObj = Object.fromEntries(userMap);
+console.log(newUserObj);
+
 
 const shops = [
     {rice: 500},
@@ -54,6 +62,6 @@ shops.forEach((shop, i) => {
 //     console.log(arrs);
 // };
 
-map.forEach((value, key, map) => {
+map.forEach((value, key) => {
     console.log(key, value);
 });
