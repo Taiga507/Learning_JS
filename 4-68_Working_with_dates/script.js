@@ -8,8 +8,8 @@ const now = new Date('2020-05-01');
 // new Date.parse('2020-05-01');
 
 // console.log(now.setHours(22, 40));
-console.log(now.setHours(40));
-console.log(now);
+// console.log(now.setHours(40));
+// console.log(now);
 
 // console.log(now.getFullYear());
 // console.log(now.getMonth());
@@ -32,4 +32,4 @@ for (let i = 0; i < 1000000; i++) {
 
 let end = new Date();
 
-alert(`Цикл отработал за ${end - start} мс`);
+console.log(`Цикл отработал за ${end - start} мс`);
