@@ -93,12 +93,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalTrigger = document.querySelectorAll('[data-modal]'),
     modal = document.querySelector('.modal'),
     modalCloseBtn = document.querySelector('[data-close]');
+  function openModal() {
+    modal.classList.add('show');
+    modal.classList.remove('hide');
+    document.body.style.overflow = 'hidden';
+    clearInterval(modalTimerId); // если пользователь открыл модальное окно, оно больше не откроетя.
+  }
+
   modalTrigger.forEach(btn => {
-    btn.addEventListener('click', () => {
-      modal.classList.add('show');
-      modal.classList.remove('hide');
-      document.body.style.overflow = 'hidden';
-    });
+    btn.addEventListener('click', openModal);
   });
   function closeModal() {
     modal.classList.add('hide');
@@ -116,6 +119,17 @@ document.addEventListener('DOMContentLoaded', () => {
       closeModal();
     }
   });
+  const modalTimerId = setTimeout(openModal, 3000); // открытие модального окна через определенный промежуток времени
+
+  function showModalByScroll() {
+    if (window.scrollY + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+      // если не работает, то необходимо добавить в конце, после scrollHeight "-1"
+      openModal();
+      window.removeEventListener('scroll', showModalByScroll);
+    }
+  }
+  ;
+  window.addEventListener('scroll', showModalByScroll);
 
   // Modal window, variant with "toggle"
 
