@@ -2,7 +2,7 @@
 
 console.log('Запрос данных...');
 
-const req = new Promise(function(resolve, reject){
+const req = new Promise((resolve, reject) => {
 	setTimeout(() => {
 		console.log('Подготовка данных...');
 
