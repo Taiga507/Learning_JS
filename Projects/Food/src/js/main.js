@@ -216,6 +216,14 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
+    // getResourse through the library axios
+    // axios.get('http://localhost:3000/menu')
+    //     .then(data => {
+    //         data.data.forEach(({img, altimg, title, descr, price}) => {
+    //             new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
+    //         });
+    //     });
+
     // Second option for getResourse
     // getResourse('http://localhost:3000/menu')
     //     .then(data => createCard(data));
