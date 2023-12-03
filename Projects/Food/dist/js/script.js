@@ -178,12 +178,50 @@ document.addEventListener('DOMContentLoaded', () => {
       this.parent.append(element);
     }
   }
-  new MenuCard("img/tabs/vegy.jpg", "vegy", 'Меню "Фитнес"', 'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!', 2.5, '.menu .container').render();
-  new MenuCard("img/tabs/elite.jpg", "elite", 'Меню “Премиум”', 'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!', 4, '.menu .container').render();
-  new MenuCard("img/tabs/post.jpg", "post", 'Меню "Постное"', 'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.', 5, '.menu .container').render();
+  const getResourse = async url => {
+    const res = await fetch(url);
+    if (!res.ok) {
+      throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+    }
+    return await res.json();
+  };
+  getResourse('http://localhost:3000/menu').then(data => {
+    data.forEach(({
+      img,
+      altimg,
+      title,
+      descr,
+      price
+    }) => {
+      new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
+    });
+  });
+
+  // Second option for getResourse
+  // getResourse('http://localhost:3000/menu')
+  //     .then(data => createCard(data));
+
+  //     function createCard(data) {
+  //         data.forEach(({img, altimg, title, descr, price}) => {
+  //             const element = document.createElement('div');
+
+  //             element.classList.add('menu__item');
+
+  //             element.innerHTML = `
+  //                 <img src=${img} alt=${altimg}>
+  //                 <h3 class="menu__item-subtitle">${title}</h3>
+  //                 <div class="menu__item-descr">${descr}</div>
+  //                 <div class="menu__item-divider"></div>
+  //                 <div class="menu__item-price">
+  //                     <div class="menu__item-cost">Цена:</div>
+  //                     <div class="menu__item-total"><span>${price}</span> руб/день</div>
+  //                 </div>
+  //             `;
+  //             document.querySelector('.menu .container').append(element);
+  //         });
+  //     }
 
   // POST forms
-
   const forms = document.querySelectorAll('form');
   const message = {
     loading: 'img/form/spinner.svg',
@@ -191,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
     failure: 'Ошибка. Попробуйте позже.'
   };
   forms.forEach(item => {
-    postData(item);
+    bindPostData(item);
   });
 
   // POST forms - formData
@@ -225,8 +263,19 @@ document.addEventListener('DOMContentLoaded', () => {
   //     });
   // }
 
+  const postData = async (url, data) => {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: data
+    });
+    return await res.json();
+  };
+
   // POST forms - JSON with fetch()
-  function postData(form) {
+  function bindPostData(form) {
     form.addEventListener('submit', e => {
       e.preventDefault();
       const statusMessage = document.createElement('img');
@@ -237,17 +286,8 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
       form.insertAdjacentElement('afterend', statusMessage);
       const formData = new FormData(form);
-      const object = {};
-      formData.forEach(function (value, key) {
-        object[key] = value;
-      });
-      fetch('server.php', {
-        method: "POST",
-        headers: {
-          'Content-type': 'application/json'
-        },
-        body: JSON.stringify(object)
-      }).then(data => data.text()).then(data => {
+      const json = JSON.stringify(Object.fromEntries(formData.entries()));
+      postData('http://localhost:3000/requests', json).then(data => {
         console.log(data);
         showThanksModal(message.success);
         statusMessage.remove();
